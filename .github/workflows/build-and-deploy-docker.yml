@@ -1,0 +1,26 @@
+name: Build and Push multi-arch docker image
+run-name: Build and Push multi-arch docker image
+on: [push]
+jobs:
+  Build-and-Push-Docker-Image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+ 
+      - name: Get git commit info
+        id: git_info
+        run: |
+          echo "commit_id=${GITHUB_SHA:0:7}" >> $GITHUB_OUTPUT   
+
+      - name: Create a new builder
+        run: |
+          docker buildx create --name mybuilder --bootstrap --use 
+
+      - name: Build and push multi-arch docker image
+        run: |
+          docker buildx build --push \
+          --platform linux/arm64/v8,linux/amd64 \
+          --tag nirdest/as4shorty:latest \
+          --tag nirdest/as4shorty:${{ steps.git_info.outputs.commit_id }} \
+          .
