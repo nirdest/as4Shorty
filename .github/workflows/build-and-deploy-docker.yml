@@ -15,7 +15,7 @@ jobs:
 
       - name: Log in into Docker Hub
         run: |
-          docker login -u ${{ secrets.DOCKERHUBUSER }} -p ${{ secrets.DOCKERHUBPASSWORD }}
+          docker login -u '${{ secrets.DOCKERHUBUSER }}' -p '${{ secrets.DOCKERHUBPASSWORD }}'
 
       - name: Create a new builder
         run: |
